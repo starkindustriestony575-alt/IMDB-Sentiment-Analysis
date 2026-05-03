@@ -2,7 +2,6 @@ import streamlit as st
 import torch
 import joblib
 from utils import load_nb_model, predict_nb, load_lstm_model, predict_lstm, load_bert_model, predict_bert, load_vocab
-from src.preprocess import preprocess_text
 import os
 
 st.set_page_config(page_title="IMDB Sentiment Analysis", page_icon="🎬", layout="wide")

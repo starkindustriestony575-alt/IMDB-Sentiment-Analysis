@@ -1,12 +1,24 @@
+import re
+import nltk
+from nltk.corpus import stopwords
+from nltk.stem import PorterStemmer
 import joblib
 import torch
 import torch.nn as nn
 from transformers import BertForSequenceClassification, BertTokenizer
 from sklearn.feature_extraction.text import TfidfVectorizer
-from src.preprocess import preprocess_text
 import pandas as pd
 import numpy as np
 import os
+
+nltk.download('stopwords', quiet=True)
+stop_words = set(stopwords.words('english'))
+stemmer = PorterStemmer()
+
+def preprocess_text(text):
+    text = re.sub('[^a-zA-Z]', ' ', str(text).lower())
+    tokens = [stemmer.stem(word) for word in text.split() if word not in stop_words and len(word) > 2]
+    return ' '.join(tokens)
 
 def load_nb_model():
     """Load NB model and TF-IDF vectorizer."""

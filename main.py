@@ -1,5 +1,5 @@
 import pandas as pd
-from src.preprocess import load_and_preprocess
+from utils import preprocess_text
 from utils import load_nb_model, load_lstm_model, load_bert_model, predict_nb, predict_bert, build_vocab
 import numpy as np
 import matplotlib.pyplot as plt
@@ -8,6 +8,12 @@ from sklearn.metrics import accuracy_score, confusion_matrix
 import torch
 import joblib
 import os
+
+def load_and_preprocess():
+    df = pd.read_csv('data/IMDB Dataset.csv')
+    df['clean_review'] = df['review'].apply(preprocess_text)
+    df['label'] = (df['sentiment'] == 'positive').astype(int)
+    return df[['clean_review', 'label']]
 
 print("Loading dataset...")
 df = load_and_preprocess()

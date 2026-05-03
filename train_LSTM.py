@@ -6,7 +6,7 @@ import os
 os.makedirs('models', exist_ok=True)
 import pandas as pd
 import numpy as np
-from src.preprocess import load_and_preprocess
+from utils import preprocess_text
 from sklearn.model_selection import train_test_split
 import torch
 import joblib
