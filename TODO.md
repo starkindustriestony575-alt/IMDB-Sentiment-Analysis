@@ -1,9 +1,8 @@
-# IMDB Sentiment Analysis - Update README.md Task
+# README Improvement Task
 
 ## TODO Steps (from approved plan):
-- [x] Step 1: Create TODO.md to track progress.
-- [x] Step 2: Update README.md with accurate project status, file list, usage, etc.
-- [x] Step 3: Verify changes and complete task.
+- [x] Step 1: Update README.md with improved structure, badges, accurate file list, demo link, author.
+- [ ] Step 2: Commit and push changes to GitHub.
+- [ ] Step 3: Verify rendered README on GitHub and complete.
 
-**All steps complete!** Task done.
-
+**Track progress here.**
