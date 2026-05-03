@@ -22,9 +22,12 @@ def preprocess_text(text):
 
 def load_nb_model():
     """Load NB model and TF-IDF vectorizer."""
-    model = joblib.load('models/nb_model.pkl')
-    vectorizer = joblib.load('models/tfidf_vectorizer.pkl')
-    return model, vectorizer
+    if os.path.exists('models/nb_model.pkl') and os.path.exists('models/tfidf_vectorizer.pkl'):
+        model = joblib.load('models/nb_model.pkl')
+        vectorizer = joblib.load('models/tfidf_vectorizer.pkl')
+        return model, vectorizer
+    print("NB models not found.")
+    return None, None
 
 def predict_nb(model, vectorizer, text):
     """Predict with NB."""
@@ -36,21 +39,27 @@ def predict_nb(model, vectorizer, text):
 
 def load_vocab():
     """Load vocab or return None."""
-    if os.path.exists('models/vocab.pkl'):
-        return joblib.load('models/vocab.pkl')
+    try:
+        if os.path.exists('models/vocab.pkl'):
+            return joblib.load('models/vocab.pkl')
+    except FileNotFoundError:
+        pass
     return None
 
 def load_lstm_model(vocab_size):
     """Load LSTM model - keep arg for app.py compat, but prefer saved vocab."""
-    vocab = load_vocab()
-    if vocab:
-        vocab_size = len(vocab)
-    model = LSTMModel(vocab_size)
-    if os.path.exists('models/lstm_model.pth'):
-        checkpoint = torch.load('models/lstm_model.pth', map_location='cpu')
-        model.load_state_dict(checkpoint)
-    model.eval()
-    return model
+    try:
+        vocab = load_vocab()
+        if vocab:
+            vocab_size = len(vocab)
+        model = LSTMModel(vocab_size)
+        if os.path.exists('models/lstm_model.pth'):
+            checkpoint = torch.load('models/lstm_model.pth', map_location='cpu')
+            model.load_state_dict(checkpoint)
+        model.eval()
+        return model
+    except (FileNotFoundError, Exception):
+        return None
 
 class LSTMModel(torch.nn.Module):
     def __init__(self, vsize):
@@ -78,9 +87,13 @@ def predict_lstm(model, vocab, text, max_len=200):
 
 def load_bert_model():
     """Load BERT model and tokenizer."""
-    model = BertForSequenceClassification.from_pretrained('models/bert_model')
-    tokenizer = BertTokenizer.from_pretrained('models/bert_tokenizer')
-    return model, tokenizer
+    try:
+        model = BertForSequenceClassification.from_pretrained('models/bert_model')
+        tokenizer = BertTokenizer.from_pretrained('models/bert_tokenizer')
+        return model, tokenizer
+    except (FileNotFoundError, Exception):
+        print("BERT models not found.")
+        return None, None
 
 def predict_bert(model, tokenizer, text, device='cpu'):
     """Predict with BERT."""

@@ -17,19 +17,18 @@ def load_models():
 
 def predict(model_choice, text):
     nb_model, nb_vectorizer, lstm_model, vocab, bert_model, bert_tokenizer = load_models()
-    clean_text = preprocess_text(text)
 
     if model_choice == "Naive Bayes":
         if nb_model is None:
-            return None, 0.0, "NB model not found. Run train_LSTM.py."
+            return None, 0.0, "🚀 NB model not found. Run `train_LSTM.py` locally first."
         sentiment, prob = predict_nb(nb_model, nb_vectorizer, text)
     elif model_choice == "LSTM":
         if lstm_model is None or vocab is None:
-            return None, 0.0, "LSTM model/vocab not found. Run train_LSTM.py."
+            return None, 0.0, "🚀 LSTM model/vocab not found. Run `train_LSTM.py` locally."
         sentiment, prob = predict_lstm(lstm_model, vocab, text, max_len=200)
     elif model_choice == "BERT":
-        if bert_model is None:
-            return None, 0.0, "BERT model not found. Run train_BERT.py."
+        if bert_model is None or bert_tokenizer is None:
+            return None, 0.0, "🚀 BERT model not found. Run `train_BERT.py` locally."
         sentiment, prob = predict_bert(bert_model, bert_tokenizer, text)
     else:
         return None, 0.0, "Select model."
@@ -38,13 +37,27 @@ def predict(model_choice, text):
 
 # UI
 st.title("🎬 IMDB Movie Review Sentiment Analysis")
-st.markdown("Classify reviews using **Naive Bayes**, **LSTM**, or **BERT**. Models in `models/`.")
+st.markdown("**Classify reviews** using available models (Naive Bayes, LSTM, BERT). *Train locally: `train_LSTM.py` / `train_BERT.py`. Cloud needs models/*.")
 
 col1, col2 = st.columns([3,1])
 with col1:
     text_input = st.text_area("Enter movie review:", height=150, placeholder="This movie was amazing! Best acting ever...")
 with col2:
-    model_choice = st.selectbox("Model:", ["Naive Bayes", "LSTM", "BERT"])
+    # Dynamic available models
+    available_models = []
+    nb_model, nb_vec = load_nb_model()
+    vocab = load_vocab()
+    lstm = load_lstm_model(1000) if vocab else None
+    bert_model, bert_tok = load_bert_model()
+    if nb_vec:
+        available_models.append("Naive Bayes")
+    if lstm:
+        available_models.append("LSTM")
+    if bert_tok:
+        available_models.append("BERT")
+    if not available_models:
+        available_models = ["No models loaded"]
+    model_choice = st.selectbox("Model:", available_models)
 
 if st.button("Predict 🎯", type="primary"):
     if text_input:
