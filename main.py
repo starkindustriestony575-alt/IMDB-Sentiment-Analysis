@@ -88,4 +88,4 @@ if nb_acc > 0:
     plt.title('Naive Bayes Confusion Matrix')
     plt.show()
 
-print("Done! Demo: python app.py")
+print("Done! Demo: streamlit run streamlit_app.py")

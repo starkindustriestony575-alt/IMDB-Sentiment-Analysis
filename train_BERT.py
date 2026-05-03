@@ -44,4 +44,4 @@ trainer.train()
 model.save_pretrained('models/bert_model')
 tokenizer.save_pretrained('models/bert_tokenizer')
 
-print("BERT ready! python main.py")
+print("BERT ready! streamlit run streamlit_app.py")
