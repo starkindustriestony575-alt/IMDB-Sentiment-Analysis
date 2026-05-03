@@ -71,13 +71,9 @@ http://localhost:8501 🎯
 python main.py  # Metrics + plots
 ```
 
-## ☁️ Deploy Streamlit Cloud
-1. Push to GitHub
-2. Streamlit Cloud → New app → Select repo/branch
 3. Main file: `streamlit_app.py`
-4. Works without models (shows instructions)
 
-## 🐋 Docker
+ 🐋 Docker
 ```bash
 docker build -t imdb-sentiment .
 docker run -p 8501:8501 -v $(pwd)/models:/app/models imdb-sentiment streamlit run streamlit_app.py
@@ -94,4 +90,4 @@ docker run -p 8501:8501 -v $(pwd)/models:/app/models imdb-sentiment streamlit ru
 ## 📄 License
 [MIT](LICENSE)
 
-⭐ **Star if useful!** Deploy live: [Streamlit template](https://streamlit.io/cloud)
+⭐ **Star if useful!**
