@@ -64,7 +64,7 @@ python train_BERT.py   # BERT → models/
 ```bash
 streamlit run app.py
 ```
-http://localhost:8501 🎯
+(http://localhost:8501/) 🎯
 
 ### 5. Evaluate
 ```bash
