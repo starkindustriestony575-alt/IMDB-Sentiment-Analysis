@@ -11,10 +11,13 @@
 [![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%96-HuggingFace-purple.svg)](https://huggingface.co/)
 [![Streamlit](https://img.shields.io/badge/Streamlit-FF3C37?style=for-the-badge&logo=streamlit)](https://streamlit.io/)
 
-## 📈 Model Performance Charts
+## . Live Demo
 
-![LSTM Training Loss](models/Figure_2.png)
-![Model Comparison](models/Figure_1.png)
+```bash
+streamlit run app.py
+```
+
+�Streamlit Cloud - (<http://localhost:8501/>) 🎯
 
 ## ✨ Features
 
@@ -67,13 +70,8 @@ python train_LSTM.py   # NB + LSTM → models/
 python train_BERT.py   # BERT → models/
 ```
 
-### 4. Demo
-```bash
-streamlit run app.py
-```
-(http://localhost:8501/) 🎯
+### 4. Evaluate
 
-### 5. Evaluate
 ```bash
 python main.py  # Metrics + plots
 ```
@@ -86,6 +84,7 @@ python main.py  # Metrics + plots
 **Main Streamlit file**: `app.py`
 
  🐋 Docker
+
 ```bash
 docker build -t imdb-sentiment .
 docker run -p 8501:8501 -v $(pwd)/models:/app/models imdb-sentiment streamlit run app.py
