@@ -11,6 +11,11 @@
 [![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%96-HuggingFace-purple.svg)](https://huggingface.co/)
 [![Streamlit](https://img.shields.io/badge/Streamlit-FF3C37?style=for-the-badge&logo=streamlit)](https://streamlit.io/)
 
+## 📈 Model Performance Charts
+
+![LSTM Training Loss](models/Figure_2.png)
+![Model Comparison](models/Figure_1.png)
+
 ## ✨ Features
 - **3 Advanced Models**: Naive Bayes, LSTM, BERT
 - **Clean Streamlit UI**: Metrics display (Sentiment/Confidence), emojis, cloud-safe
