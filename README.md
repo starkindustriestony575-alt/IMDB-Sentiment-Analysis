@@ -64,7 +64,7 @@ python train_BERT.py   # BERT → models/
 ```bash
 streamlit run app.py
 ```
-(http://localhost:8501/) 🎯
+(http://192.168.29.133:8501/) 🎯
 
 ### 5. Evaluate
 ```bash
@@ -73,11 +73,6 @@ python main.py  # Metrics + plots
 
 **Main Streamlit file**: `app.py`
 
- 🐋 Docker
-```bash
-docker build -t imdb-sentiment .
-docker run -p 8501:8501 -v $(pwd)/models:/app/models imdb-sentiment streamlit run app.py
-```
 
 ## 🔧 Troubleshooting
 | Issue | Solution |
