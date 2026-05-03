@@ -15,8 +15,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy app
 COPY . .
 
-# Expose Gradio port
-EXPOSE 7860
+# Streamlit runs on 8501 by default
+EXPOSE 8501
 
-# Run app
-CMD ["python", "app.py"]
+# Run Streamlit (use platform PORT if provided)
+CMD ["sh", "-c", "streamlit run app.py --server.address 0.0.0.0 --server.port ${PORT:-8501}"]
