@@ -1,106 +1,270 @@
-# 🎬 IMDB Sentiment Analysis
+<!--
+Presentation-style README meant to be converted to PDF.
+Recommended conversion:
+- If you have pandoc: pandoc README.md -o README.pdf
+- Otherwise: open this file in VSCode/Browser and use Print -> Save as PDF
+-->
 
-[![GitHub stars](https://img.shields.io/github/stars/starkindustriestony575-alt/IMDB-Sentiment-Analysis?style=social)](https://github.com/starkindustriestony575-alt/IMDB-Sentiment-Analysis)
-[![GitHub issues](https://img.shields.io/github/issues/starkindustriestony575-alt/IMDB-Sentiment-Analysis)](https://github.com/starkindustriestony575-alt/IMDB-Sentiment-Analysis/issues)
-[![GitHub license](https://img.shields.io/github/license/starkindustriestony575-alt/IMDB-Sentiment-Analysis)](https://github.com/starkindustriestony575-alt/IMDB-Sentiment-Analysis/blob/main/LICENSE)
-[![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
+# 🎬 IMDB Sentiment Analysis — Project Presentation
 
-**Author**: [Tony Stark](https://github.com/starkindustriestony575-alt)
+---
 
-[![PyTorch](https://img.shields.io/badge/PyTorch-2.0%2B-orange.svg)](https://pytorch.org/)
-[![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%96-HuggingFace-purple.svg)](https://huggingface.co/)
-[![Streamlit](https://img.shields.io/badge/Streamlit-FF3C37?style=for-the-badge&logo=streamlit)](https://streamlit.io/)
+## Slide 1 — Title
 
-##  Live Demo
+**IMDB Movie Review Sentiment Analysis**  
+Classify reviews as: **Positive / Negative** using:
 
-```bash
-streamlit run app.py
-```
+- **Naive Bayes (NB)** (TF‑IDF)
+- **LSTM** (token vocab from training subset)
+- **BERT** (fine‑tuning)
 
-Streamlit Cloud - (<http://localhost:8501/>) 🎯
+---
 
-## ✨ Features
+## Slide 2 — What you get
 
-- **3 Advanced Models**: Naive Bayes, LSTM, BERT
-- **Clean Streamlit UI**: Metrics display (Sentiment/Confidence), emojis, cloud-safe
-- **Preprocessing**: Stemming, stopwords in utils.py
-- **Evaluation**: main.py accuracy/plots
-- **Production Ready**: Docker, Streamlit Cloud deploy
+- A Streamlit app for inference
+- One script to train **all models** end‑to‑end:
+  - `train_all_models.py`
+- Model artifacts stored in:
+  - `models/`
 
-## 📊 Performance (example)
+---
 
-| Model | Accuracy |
-|-------|----------|
-| Naive Bayes | ~85% |
-| LSTM | ~87% |
-| BERT | ~91% |
+## Slide 3 — Problem Statement
 
-## 🏗️ Structure
+Given an IMDb movie review text, predict the sentiment label:
 
-```
+- **positive**
+- **negative**
+
+---
+
+## Slide 4 — Dataset
+
+**File:** `data/IMDB Dataset.csv`  
+Each row contains:
+
+- `review` (text)
+- `sentiment` (string label)
+
+During training we create:
+
+- `clean_review` = preprocessed text
+- `label` = `1` if sentiment == `positive`, else `0`
+
+---
+
+## Slide 5 — Preprocessing (Shared)
+
+Implemented in `utils.py`:
+
+- Lowercase
+- Remove non-letters
+- Tokenize
+- Remove **NLTK stopwords**
+- Apply **Porter stemming**
+
+Output is a single cleaned string used by:
+
+- Naive Bayes (TF‑IDF)
+- LSTM (vocab + integer sequences)
+
+---
+
+## Slide 6 — Model 1: Naive Bayes (TF‑IDF)
+
+**Training steps:**
+
+1. Create TF‑IDF features from `clean_review`
+2. Fit `MultinomialNB` classifier
+3. Save:
+   - `models/nb_model.pkl`
+   - `models/tfidf_vectorizer.pkl`
+
+**Inference logic:**
+
+- `utils.predict_nb()` → returns `(sentiment, confidence_prob)`
+
+---
+
+## Slide 7 — Model 2: LSTM Sentiment Classifier
+
+**Training strategy:**
+
+- Train on a subset for speed (default: `lstm_samples=3000`)
+- Build vocabulary from training subset:
+  - `models/vocab.pkl`
+- Convert reviews to padded integer sequences of fixed length:
+  - `max_len=200`
+- Train a small PyTorch LSTM:
+  - Embedding → LSTM → Linear → Sigmoid
+
+**Artifacts saved:**
+
+- `models/lstm_model.pth`
+
+**Inference:**
+
+- `utils.predict_lstm()` → returns `(sentiment, prob)`
+
+---
+
+## Slide 8 — Model 3: BERT Fine‑Tuning
+
+**Base model:** `bert-base-uncased`  
+**Training strategy:**
+
+- Sample subset for speed (default: `samples=2000`)
+- Tokenize with:
+  - padding to `max_length=128`
+- Fine‑tune `BertForSequenceClassification(num_labels=2)` for 1 epoch by default
+
+**Artifacts saved:**
+
+- `models/bert_model/`
+- `models/bert_tokenizer/`
+
+**Inference:**
+
+- `utils.predict_bert()` → returns `(sentiment, confidence_prob)`
+
+---
+
+## Slide 9 — Training Pipeline (Unified)
+
+Use:
+
+- `train_all_models.py`
+
+What it does:
+
+1. Train NB + LSTM (saves `models/nb_model.pkl`, `models/tfidf_vectorizer.pkl`, `models/vocab.pkl`, `models/lstm_model.pth`)
+2. Train BERT (saves `models/bert_model/`, `models/bert_tokenizer/`)
+3. Print completion messages
+
+---
+
+## Slide 10 — Streamlit App (Inference + Optional Retraining)
+
+**Main app:** `app.py`
+
+UI features:
+
+- Input text box
+- Model dropdown (auto-detects loaded artifacts)
+- Predict button
+- Metrics:
+  - Sentiment
+  - Confidence %
+- Optional local training:
+  - “Train LSTM (and NB) 🧠”
+  - “Train BERT ⚡”
+- After training, cached loader is cleared:
+  - `load_models.clear()`
+  - then `st.rerun()` updates the model list
+
+---
+
+## Slide 11 — Repository Structure
+
+```text
 .
-app.py                # 🎨 Main Streamlit UI (clean output)
-├── utils.py             # 🤖 All models/preprocessing
-├── train_LSTM.py        # Train NB+LSTM
-├── train_BERT.py        # Train BERT
-├── main.py              # Evaluate + plots
-├── data/                # IMDB Dataset.csv
-├── models/              # Trained models (*.pkl/.pth)
-├── requirements.txt
-├── Dockerfile
-└── README.md
+app.py                 # Streamlit UI (inference + training buttons)
+utils.py               # preprocessing + model loaders + predictors
+main.py                # evaluation/plots (optional)
+train_all_models.py   # train NB+LSTM and BERT end-to-end
+data/                 # dataset file
+models/               # trained model artifacts
+requirements.txt
+README.md
 ```
 
-## 🚀 Quickstart
+---
 
-### 1. Install
+## Slide 12 — How to Run (Local)
+
+### 1) Install dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 2. Data
+### 2) Ensure dataset exists
 
-Download [IMDB Dataset.csv](https://www.kaggle.com/datasets/lakshmi25npathi/imdb-dataset-of-50k-movie-reviews) to `data/`
+- Place `IMDB Dataset.csv` into `data/`
 
-### 3. Train
-
-```bash
-python train_LSTM.py   # NB + LSTM → models/
-python train_BERT.py   # BERT → models/
-```
-
-### 4. Evaluate
+### 3) Train all models (recommended)
 
 ```bash
-python main.py  # Metrics + plots
+python train_all_models.py
 ```
 
-### 5. 📈 Model Performance Charts
-
-![LSTM Training Loss](models/Figure_2.png)
-![Model Comparison](models/Figure_1.png)
-
-**Main Streamlit file**: `app.py`
-
- 🐋 Docker
+### 4) Start the app
 
 ```bash
-docker build -t imdb-sentiment .
-docker run -p 8501:8501 -v $(pwd)/models:/app/models imdb-sentiment streamlit run app.py
+streamlit run app.py
 ```
 
-## 🔧 Troubleshooting
+---
 
-| Issue | Solution |
-|-------|----------|
-| No models | Run train scripts, check models/ |
-| Cloud error | Models not needed (app handles gracefully) |
-| NLTK | Auto-downloads |
-| CUDA | CPU fallback |
+## Slide 13 — How to Use (Inference)
 
-## 📄 License
+1. Type a review in the text box
+2. Choose model:
+   - Naive Bayes / LSTM / BERT (only shown if artifacts exist)
+3. Click **Predict 🎯**
+4. Read:
+   - **Sentiment**
+   - **Confidence**
 
-[MIT](LICENSE)
+---
 
-⭐ **Star if useful!**
+## Slide 14 — Quick Example
+
+Input:
+> “This movie was amazing! Best acting ever…”
+
+Expected output (example):
+
+- **Naive Bayes:** positive (~0.68)
+- **LSTM:** positive (~0.52)
+- **BERT:** positive (~0.98)
+
+(Actual values vary slightly depending on training subset sizes.)
+
+---
+
+## Slide 15 — Results & Notes
+
+- NB + TF‑IDF provides a fast baseline.
+- LSTM adds sequence modeling using a learned embedding + recurrent layer.
+- BERT usually performs best with strong contextual representations, at the cost of training time.
+
+---
+
+## Slide 16 — Common Issues / Troubleshooting
+
+### No model available in dropdown
+
+- Train using `python train_all_models.py`
+- Or use training buttons in the Streamlit app
+
+### BERT download is slow
+
+- First run downloads model weights from Hugging Face
+
+### NLTK stopwords error
+
+- `utils.py` runs `nltk.download('stopwords', quiet=True)` automatically
+
+---
+
+## Slide 17 — License
+
+Project licensed under **MIT** (see `LICENSE`).
+
+---
+
+## Slide 18 — End
+
+✅ App + training pipeline + predictors are integrated and runnable locally.
