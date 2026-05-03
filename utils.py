@@ -108,5 +108,6 @@ def predict_bert(model, tokenizer, text, device='cpu'):
 
 def build_vocab(df):
     """Build vocab from df."""
-    all_words = ' '.join(df['clean_review']).split()
-    vocab = {word: i+1 for i, word in enumerate(set(all_words))}
+    all_words = " ".join(df["clean_review"]).split()
+    vocab = {word: i + 1 for i, word in enumerate(set(all_words))}
+    return vocab
