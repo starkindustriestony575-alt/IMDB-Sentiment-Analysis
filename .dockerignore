@@ -1,0 +1,10 @@
+**/*.pyc
+**/venv
+**/__pycache__
+**/gradio
+**/temp
+**/notebooks
+**/data
+**/.git
+**/.vscode
+.DS_Store
