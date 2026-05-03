@@ -11,13 +11,13 @@
 [![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%96-HuggingFace-purple.svg)](https://huggingface.co/)
 [![Streamlit](https://img.shields.io/badge/Streamlit-FF3C37?style=for-the-badge&logo=streamlit)](https://streamlit.io/)
 
-## . Live Demo
+##  Live Demo
 
 ```bash
 streamlit run app.py
 ```
 
-�Streamlit Cloud - (<http://localhost:8501/>) 🎯
+Streamlit Cloud - (<http://localhost:8501/>) 🎯
 
 ## ✨ Features
 
