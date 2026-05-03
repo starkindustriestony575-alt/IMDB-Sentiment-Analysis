@@ -1,135 +1,101 @@
-# 🎬 IMDB Sentiment Analysis [![GitHub](https://img.shields.io/badge/GitHub-Repo-black?logo=github)](https://github.com/starkindustriestony575-alt/IMDB-Sentiment-Analysis) [![Stars](https://img.shields.io/github/stars/starkindustriestony575-alt/IMDB-Sentiment-Analysis?style=social)](https://github.com/starkindustriestony575-alt/IMDB-Sentiment-Analysis) [![License](https://img.shields.io/github/license/starkindustriestony575-alt/IMDB-Sentiment-Analysis)](LICENSE)
+# 🎬 IMDB Sentiment Analysis 
+[![GitHub stars](https://img.shields.io/github/stars/starkindustriestony575-alt/IMDB-Sentiment-Analysis?style=social)](https://github.com/starkindustriestony575-alt/IMDB-Sentiment-Analysis)
+[![GitHub issues](https://img.shields.io/github/issues/starkindustriestony575-alt/IMDB-Sentiment-Analysis)](https://github.com/starkindustriestony575-alt/IMDB-Sentiment-Analysis/issues)
+[![GitHub license](https://img.shields.io/github/license/starkindustriestony575-alt/IMDB-Sentiment-Analysis)](https://github.com/starkindustriestony575-alt/IMDB-Sentiment-Analysis/blob/main/LICENSE)
+[![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
 
-**Author**: Tony Stark (starkindustriestony575-alt)
+**Author**: [Tony Stark](https://github.com/starkindustriestony575-alt) 
 
-[![Python](https://img.shields.io/badge/Python-3.10+-blue)](https://www.python.org/)
-[![PyTorch](https://img.shields.io/badge/PyTorch-2.0+-orange)](https://pytorch.org/)
-[![🤖 HuggingFace](https://img.shields.io/badge/HuggingFace-Transformers-brightgreen)](https://huggingface.co/)
-[![Gradio](https://img.shields.io/badge/Gradio-UI-yellow)](https://gradio.app/)
+[![PyTorch](https://img.shields.io/badge/PyTorch-2.0%2B-orange.svg)](https://pytorch.org/)
+[![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%96-HuggingFace-purple.svg)](https://huggingface.co/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-FF3C37?style=for-the-badge&logo=streamlit)](https://streamlit.io/)
 
-## 📋 Table of Contents
-- [Overview](#overview)
-- [Features](#features)
-- [Project Structure](#project-structure)
-- [Quick Start](#quick-start)
-- [Performance Benchmarks](#performance-benchmarks)
-- [Demo](#demo)
-- [Docker & Deployment](#docker--deployment)
-- [Troubleshooting](#troubleshooting)
-- [Contributing](#contributing)
-- [License](#license)
+## ✨ Features
+- **3 Advanced Models**: Naive Bayes (85%+), LSTM (87%+), BERT (91%+)
+- **Preprocessing**: NLTK stemming, stopwords, regex cleaning
+- **Interactive UI**: Streamlit dashboard with **clean metrics display** 🎭📊 (Sentiment, Confidence %, emojis, low-confidence warnings)
+- **Evaluation**: Accuracy, F1, confusion matrices, plots
+- **Production**: Dockerized, HF Spaces ready
+- **Dataset**: 50K IMDB movie reviews
 
-## Overview
-Advanced **sentiment analysis** on the [IMDB Movie Reviews dataset](https://www.kaggle.com/datasets/lakshmi25npathi/imdb-dataset-of-50k-movie-reviews) (50K reviews). Classifies movie reviews as **positive** (1) or **negative** (0) using 3 state-of-the-art models.
+## 📊 Performance
+| Model | Accuracy | F1 Score | Train Time |
+|-------|----------|----------|------------|
+| Naive Bayes | **85.2%** | 0.85 | <1 min |
+| LSTM | **87.3%** | 0.87 | 10-15 min |
+| **BERT** | **91.2%** | 0.91 | ~5 min |
 
-**Built with:**
-- Preprocessing: NLTK stopwords, Porter stemming, regex (`src/preprocess.py`)
-- Models: Naive Bayes (TF-IDF), LSTM (PyTorch), BERT (fine-tuned)
-- UI: Gradio for interactive demo (`app.py`)
-- Eval: Confusion matrices, accuracy plots (`main.py`)
-
-## Features
-| Feature | Description | Script |
-|---------|-------------|--------|
-| Preprocessing | Clean text, stem, remove stopwords | `src/preprocess.py` |
-| Naive Bayes | TF-IDF + MultinomialNB (~85% acc) | `train_LSTM.py` |
-| LSTM | Embedding + RNN (~87% acc) | `train_LSTM.py` |
-| BERT | Fine-tuned bert-base-uncased (~91% acc) | `train_BERT.py` |
-| Evaluation | Acc, CM, plots | `main.py` |
-| Demo | Gradio UI, all models | `app.py` |
-| Docker | Containerized app | `Dockerfile` |
-
-## Project Structure
+## 🏗️ Structure
 ```
-imdb-sentiment-analysis/
-├── app.py                 # Gradio demo UI
-├── main.py                # Evaluation & plots
-├── utils.py               # Model loading/prediction
-├── train_LSTM.py          # Train NB + LSTM
-├── train_BERT.py          # Fine-tune BERT
-├── src/
-│   ├── __init__.py
-│   └── preprocess.py      # Text cleaning
-├── data/
-│   └── IMDB Dataset.csv   # 50K reviews
-├── models/                # Trained models
-│   ├── nb_model.pkl
-│   ├── lstm_model.pth
-│   ├── tfidf_vectorizer.pkl
-│   ├── vocab.pkl
-│   └── bert_model/        # HF format
-├── requirements.txt       # Dependencies
-├── Dockerfile             # Container
-├── TODO.md                # Next steps
-├── .gitignore             # Ignores venv/data large files
-├── CONTRIBUTING.md
-└── LICENSE
+.
+├── streamlit_app.py     # 🎨 Streamlit UI (updated: clean output with st.metric)
+├── main.py             # 📈 Eval & plots
+├── utils.py            # 🤖 Model predict/load
+├── train_LSTM.py       # NB + LSTM training
+├── train_BERT.py       # BERT fine-tune
+├── src/preprocess.py   # 🧹 Text cleaning
+├── data/IMDB Dataset.csv
+├── models/             # 💾 All trained models
+├── requirements.txt
+├── Dockerfile
+└── README.md
 ```
 
-## 🚀 Quick Start
-### Prerequisites
-- Python 3.10+
-- Download [IMDB Dataset.csv](https://www.kaggle.com/datasets/lakshmi25npathi/imdb-dataset-of-50k-movie-reviews) to `data/`
-
+## 🚀 Quickstart
+### 1. Setup
 ```bash
 pip install -r requirements.txt
 ```
 
-### Train
+### 2. Download data
+Place [IMDB Dataset.csv](https://www.kaggle.com/datasets/lakshmi25npathi/imdb-dataset-of-50k-movie-reviews) in `data/`
+
+### 3. Train
 ```bash
-python train_LSTM.py    # NB + LSTM
-python train_BERT.py    # BERT (~5 min)
+python train_LSTM.py  # NB + LSTM
+python train_BERT.py  # BERT
 ```
 
-### Evaluate
+### 4. Evaluate
 ```bash
-python main.py  # Accuracies, plots saved as PNG
+python main.py  # Prints metrics + saves plots/
 ```
 
-### Demo
+### 5. **Demo** (Now with clean output!)
 ```bash
-python app.py  # http://127.0.0.1:7860
-python app.py --share  # Public link (gradio.app)
+streamlit run streamlit_app.py
 ```
-**Live Demo**: [Try Gradio here](https://your-gradio-link.gradio.live) *(Run with --share for link)*
+Open [http://localhost:8501](http://localhost:8501) 🚀
 
-## Performance Benchmarks
-Run `main.py` on test set:
+**Example:** "This movie sucked!" → Red **NEGATIVE** metric, ❌ summary, confidence %.
 
-| Model | Accuracy | F1-Score | Train Time |
-|-------|----------|----------|------------|
-| Naive Bayes | 85.2% | 0.85 | <1 min |
-| LSTM | 87.3% | 0.87 | 10-15 min |
-| BERT | 91.2% | 0.91 | 5 min (2K samples) |
-
-![Results Plot](plots/results.png) *(Auto-generated by main.py)*
-
-## 🐳 Docker & Deployment
+## 🐋 Docker
 ```bash
 docker build -t imdb-sentiment .
-docker run -p 7860:7860 imdb-sentiment python app.py
+docker run -p 8501:8501 imdb-sentiment streamlit run streamlit_app.py --server.port 8501 --server.address 0.0.0.0
 ```
 
-**Deploy:**
-- [Hugging Face Spaces](https://huggingface.co/spaces/new?template=gradio)
-- Heroku: `Procfile: web: python app.py`
-- Render/Vercel supported
+## ☁️ Deploy
+- Render/Railway: Add `Procfile: web: streamlit run streamlit_app.py --server.port $PORT`
+- Vercel (static + API)
 
-## Troubleshooting
-- **No models**: Run training first
-- **NLTK missing**: Auto-downloads
-- **GPU**: Auto CPU fallback
-- **Data**: Place CSV in `data/`
-- **Large models**: `.gitignore` skips
+## 🔧 Troubleshooting
+| Issue | Solution |
+|-------|----------|
+| No models | `train_LSTM.py` / `train_BERT.py` |
+| NLTK data | Auto-downloads |
+| CUDA error | Falls back to CPU |
+| Large files | `.gitignore` excludes |
+| Messy output | Fixed in latest streamlit_app.py! |
 
-## Contributing
-See [CONTRIBUTING.md](CONTRIBUTING.md). PRs welcome! ⭐
+## 🤝 Contributing
+1. Fork repo
+2. Create branch
+3. PR to `main`
 
-## License
-[MIT](LICENSE) - Free to use/fork.
+See [CONTRIBUTING.md](CONTRIBUTING.md)
 
-**Author**: Tony Stark  
-**Repo**: https://github.com/starkindustriestony575-alt/IMDB-Sentiment-Analysis  
+## 📄 License
+[MIT](LICENSE) © Tony Stark
 
-🎥 **Classify your movie review now: `python app.py`** 🚀
-
+⭐ **Star if useful!** 🎥

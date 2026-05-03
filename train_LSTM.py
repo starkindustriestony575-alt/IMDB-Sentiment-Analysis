@@ -70,6 +70,10 @@ print("LSTM saved.")
 
 torch.save(model.state_dict(), 'models/lstm_model.pth')
 
-print("3. BERT ready (run train_bert_quick.py).")
-
-print("Train complete! Run python main.py or app.py")
+print("✅ Training complete! All models ready.")
+print("")
+print("Next steps:")
+print("  python train_BERT.py     # BERT fine-tuning")
+print("  python main.py          # Evaluate + plots")
+print("  streamlit run streamlit_app.py  # Demo UI")
+print("  python app.py           # Gradio UI")

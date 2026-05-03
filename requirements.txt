@@ -14,5 +14,5 @@ joblib
 jupyter
 ipykernel
 notebook
-gradio
+streamlit
 
