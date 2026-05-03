@@ -33,7 +33,7 @@
 ## 🏗️ Structure
 ```
 .
-├── streamlit_app.py     # 🎨 Main Streamlit UI (clean output)
+app.py                # 🎨 Main Streamlit UI (clean output)
 ├── utils.py             # 🤖 All models/preprocessing
 ├── train_LSTM.py        # Train NB+LSTM
 ├── train_BERT.py        # Train BERT
@@ -62,7 +62,7 @@ python train_BERT.py   # BERT → models/
 
 ### 4. Demo
 ```bash
-streamlit run streamlit_app.py
+streamlit run app.py
 ```
 http://localhost:8501 🎯
 
@@ -71,12 +71,12 @@ http://localhost:8501 🎯
 python main.py  # Metrics + plots
 ```
 
-3. Main file: `streamlit_app.py`
+**Main Streamlit file**: `app.py`
 
  🐋 Docker
 ```bash
 docker build -t imdb-sentiment .
-docker run -p 8501:8501 -v $(pwd)/models:/app/models imdb-sentiment streamlit run streamlit_app.py
+docker run -p 8501:8501 -v $(pwd)/models:/app/models imdb-sentiment streamlit run app.py
 ```
 
 ## 🔧 Troubleshooting
