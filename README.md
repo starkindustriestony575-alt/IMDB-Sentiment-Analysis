@@ -8,6 +8,12 @@ Classify IMDb movie reviews as positive or negative using three different models
 - LSTM neural network
 - BERT (fine-tuned bert-base-uncased)
 
+##  Live Demo
+```bash
+streamlit run app.py
+```
+Streamlit Cloud - (http://localhost:8501/) 🎯
+
 ## Features
 
 - Streamlit web application for interactive sentiment prediction
