@@ -14,7 +14,7 @@ Classify IMDb movie reviews as positive or negative using three different models
 streamlit run app.py
 ```
 
-Streamlit Cloud - (https://imdb-sentiment-analysis-deexkp6eos2hnwmxz7npxh.streamlit.app/) 🎯
+Streamlit Cloud - (<https://imdb-sentiment-analysis-deexkp6eos2hnwmxz7npxh.streamlit.app/>) 🎯
 
 ## Features
 
