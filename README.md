@@ -51,7 +51,8 @@ python train_BERT.py   # BERT → models/
 ```bash
 streamlit run app.py
 ```
-   Local URL: http://localhost:8501
+
+   Local URL: <http://localhost:8501>
 
 In the web interface:
 
