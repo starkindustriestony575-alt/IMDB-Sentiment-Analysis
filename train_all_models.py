@@ -104,11 +104,11 @@ def train_nb_and_lstm(
 
 def train_bert(
     data_path: str = "data/IMDB Dataset.csv",
-    samples: int = 2000,
+    samples: int = 600,
     test_size: float = 0.2,
     max_length: int = 128,
     num_train_epochs: int = 1,
-    batch_size: int = 4,
+    batch_size: int = 8,
     seed: int = 42,
 ) -> None:
     if not os.path.exists(data_path):
