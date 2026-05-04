@@ -10,7 +10,7 @@ from torch.utils.data import Dataset, DataLoader
 from transformers import BertTokenizer, BertForSequenceClassification, Trainer, TrainingArguments
 from datasets import Dataset as HFDataset
 
-from utils import preprocess_text, load_vocab, build_vocab, LSTMModel
+from utils import preprocess_text, build_vocab, LSTMModel
 
 
 class TextDataset(Dataset):
@@ -32,7 +32,7 @@ class TextDataset(Dataset):
 def train_nb_and_lstm(
     data_path: str = "data/IMDB Dataset.csv",
     nb_vectorizer_max_features: int = 5000,
-    lstm_samples: int = 3000,
+    lstm_samples: int = 2000,
     max_len: int = 200,
     lstm_epochs: int = 2,
     batch_size: int = 32,
@@ -47,13 +47,10 @@ def train_nb_and_lstm(
     df["clean_review"] = df["review"].apply(preprocess_text)
     df["label"] = (df["sentiment"] == "positive").astype(int)
 
-    # Train Naive Bayes on full dataset (clean_review)
+    # Naive Bayes
     X_train, _, y_train, _ = train_test_split(
-        df["clean_review"],
-        df["label"],
-        test_size=0.2,
-        random_state=seed,
-        stratify=df["label"],
+        df["clean_review"], df["label"], test_size=0.2,
+        random_state=seed, stratify=df["label"]
     )
 
     vectorizer = TfidfVectorizer(max_features=nb_vectorizer_max_features)
@@ -65,17 +62,14 @@ def train_nb_and_lstm(
     joblib.dump(nb_model, "models/nb_model.pkl")
     joblib.dump(vectorizer, "models/tfidf_vectorizer.pkl")
 
-    # Train LSTM on a subset
+    # LSTM
     df_small = df.sample(n=lstm_samples, random_state=seed) if len(df) > lstm_samples else df
     vocab = build_vocab(df_small)
     joblib.dump(vocab, "models/vocab.pkl")
 
     X_train, _, y_train, _ = train_test_split(
-        df_small["clean_review"],
-        df_small["label"],
-        train_size=0.8,
-        random_state=seed,
-        stratify=df_small["label"],
+        df_small["clean_review"], df_small["label"],
+        train_size=0.8, random_state=seed, stratify=df_small["label"]
     )
 
     train_ds = TextDataset(X_train, y_train, vocab=vocab, max_len=max_len)
@@ -88,23 +82,26 @@ def train_nb_and_lstm(
     criterion = torch.nn.BCELoss()
 
     model.train()
-    for _ in range(lstm_epochs):
+    for epoch in range(lstm_epochs):
+        total_loss = 0
         for data, target in loader:
             data = data.to(device)
             target = target.to(device)
-
             optimizer.zero_grad()
             output = model(data).squeeze()
             loss = criterion(output, target.float())
             loss.backward()
             optimizer.step()
+            total_loss += loss.item()
+        print(f"LSTM Epoch {epoch+1}/{lstm_epochs} - Loss: {total_loss/len(loader):.4f}")
 
     torch.save(model.state_dict(), "models/lstm_model.pth")
+    print(f"✅ LSTM trained on {lstm_samples} samples")
 
 
 def train_bert(
     data_path: str = "data/IMDB Dataset.csv",
-    samples: int = 600,
+    samples: int = 600,         
     test_size: float = 0.2,
     max_length: int = 128,
     num_train_epochs: int = 1,
@@ -121,10 +118,7 @@ def train_bert(
 
     df_sample = df.sample(n=samples, random_state=seed) if len(df) > samples else df
     train_df, test_df = train_test_split(
-        df_sample,
-        test_size=test_size,
-        random_state=seed,
-        stratify=df_sample["label"],
+        df_sample, test_size=test_size, random_state=seed, stratify=df_sample["label"]
     )
 
     tokenizer = BertTokenizer.from_pretrained("bert-base-uncased")
@@ -138,7 +132,6 @@ def train_bert(
         )
 
     train_dataset = HFDataset.from_pandas(train_df).map(tokenize_function, batched=True)
-    test_dataset = HFDataset.from_pandas(test_df).map(tokenize_function, batched=True)
 
     model = BertForSequenceClassification.from_pretrained("bert-base-uncased", num_labels=2)
 
@@ -147,34 +140,39 @@ def train_bert(
         num_train_epochs=num_train_epochs,
         per_device_train_batch_size=batch_size,
         per_device_eval_batch_size=batch_size,
-        warmup_steps=100,
+        warmup_steps=50,
         weight_decay=0.01,
         logging_steps=10,
-        evaluation_strategy="epoch" if num_train_epochs >= 1 else "no",
+        eval_strategy="no",        
+        save_strategy="no",
+        report_to="none",
     )
 
     trainer = Trainer(
         model=model,
         args=training_args,
         train_dataset=train_dataset,
-        eval_dataset=test_dataset,
     )
+    
+    print(f"Training BERT on {samples} samples...")
     trainer.train()
 
     model.save_pretrained("models/bert_model")
     tokenizer.save_pretrained("models/bert_tokenizer")
+    print("✅ BERT training completed")
 
 
 def main() -> None:
-    print("Training Naive Bayes + LSTM...")
+    print("🚀 Starting training...")
+
+    print("\n1. Training Naive Bayes + LSTM...")
     train_nb_and_lstm()
-    print("✅ Naive Bayes + LSTM ready.")
 
-    print("Training BERT...")
+    print("\n2. Training BERT (Light version)...")
     train_bert()
-    print("✅ BERT ready.")
 
-    print("All models trained. Start app: streamlit run app.py")
+    print("\n✅ All models trained successfully!")
+    print("Run: streamlit run app.py")
 
 
 if __name__ == "__main__":
