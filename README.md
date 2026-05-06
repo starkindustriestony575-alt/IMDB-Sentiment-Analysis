@@ -103,12 +103,19 @@ The following figures illustrate key aspects of model performance:
 ![Training Metrics](models/Figure_2.png)
 *Figure 2: Training metrics and loss curves*
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 ## Notes
 
 - First-time BERT usage downloads model weights from Hugging Face (may be slow initially)
 - NLTK stopwords are downloaded automatically on first run
 - Training uses subsets by default for faster execution (adjust parameters in training scripts)
+
+#### License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+ 👤 Author
+
+**Sarvagya Gupta**  
+*(Little Stark)*
+
+[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/starkindustriestony575-alt) [![Email](https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:starkgupta575@gmail.com)
